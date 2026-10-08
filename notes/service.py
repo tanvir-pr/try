@@ -26,3 +26,19 @@ class Notebook:
 
     def list_notes(self) -> list[Note]:
         return self.store.load()
+
+    def complete(self, note_id: int) -> Note:
+        notes = self.store.load()
+        for note in notes:
+            if note.id == note_id:
+                note.done = True
+                self.store.save(notes)
+                return note
+        raise KeyError(f"no note with id {note_id}")
+
+    def delete(self, note_id: int) -> None:
+        notes = self.store.load()
+        kept = [note for note in notes if note.id != note_id]
+        if len(kept) == len(notes):
+            raise KeyError(f"no note with id {note_id}")
+        self.store.save(kept)
