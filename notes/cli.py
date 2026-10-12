@@ -19,7 +19,8 @@ def build_parser() -> argparse.ArgumentParser:
     add = sub.add_parser("add", help="save a note")
     add.add_argument("text")
 
-    sub.add_parser("list", help="show every note")
+    listing = sub.add_parser("list", help="show notes")
+    listing.add_argument("--open", action="store_true", help="hide notes already done")
 
     done = sub.add_parser("done", help="mark a note done")
     done.add_argument("id", type=int)
@@ -39,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "list":
-        notes = book.list_notes()
+        notes = book.list_notes(include_done=not args.open)
         if not notes:
             print("no notes yet")
             return 0

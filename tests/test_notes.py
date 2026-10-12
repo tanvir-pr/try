@@ -36,6 +36,13 @@ class NotebookTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.book.complete(99)
 
+    def test_list_can_hide_done(self) -> None:
+        self.book.add("keep")
+        finished = self.book.add("finish me")
+        self.book.complete(finished.id)
+        open_notes = self.book.list_notes(include_done=False)
+        self.assertEqual([note.text for note in open_notes], ["keep"])
+
 
 if __name__ == "__main__":
     unittest.main()

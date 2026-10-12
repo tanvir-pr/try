@@ -24,8 +24,11 @@ class Notebook:
         self.store.save(notes)
         return note
 
-    def list_notes(self) -> list[Note]:
-        return self.store.load()
+    def list_notes(self, *, include_done: bool = True) -> list[Note]:
+        notes = self.store.load()
+        if include_done:
+            return notes
+        return [note for note in notes if not note.done]
 
     def complete(self, note_id: int) -> Note:
         notes = self.store.load()
